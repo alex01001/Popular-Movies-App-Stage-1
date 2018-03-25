@@ -2,6 +2,8 @@ package com.example.android.popularmovie1;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -32,12 +35,17 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private byte outputArraysLength;
     boolean sortPopular; // Sort Mode. True = Popular movies, False = top rated movies
     public List<Movie> movieList;
+    TextView errorMessageTextView;
+    ProgressBar mLoadingIndicator;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        errorMessageTextView = (TextView) findViewById(R.id.tv_error_message_diaplay);
+        mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_postersGrid);
         sortPopular = true;
         outputArraysLength = 4;
@@ -46,18 +54,53 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         adapter = new MovieAdapter(getBaseContext(), this);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setLayoutManager(new GridLayoutManager(getBaseContext(), 2));
-
+        makeSearchQuery();
     }
-    // method to display the result query URL
+    // check if we are connected to a network
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        return netInfo != null && netInfo.isConnectedOrConnecting();
+    }
     private void makeSearchQuery() {
      //   String priceQuery = mSearchBoxEditText.getText().toString();
-        URL MovieUrl = NetworkTools.buildUrl(sortPopular);
-        String searchResults = null;
-        Log.i("sss", MovieUrl.toString());
-        new MovieQueryTask().execute(MovieUrl);
+        if(isOnline()) {
+            URL MovieUrl = NetworkTools.buildUrl(sortPopular);
+            String searchResults = null;
+            Log.i("sss", MovieUrl.toString());
+            new MovieQueryTask().execute(MovieUrl);
+
+        }else {
+            showErrorMessage();
+
+        }
+
     }
+
+    private void showPosterGrid(){
+        mRecyclerView.setVisibility(View.VISIBLE);
+        errorMessageTextView.setVisibility(View.GONE);
+        mLoadingIndicator.setVisibility(View.GONE);
+    }
+    // shows error when unable to load data
+    private void showErrorMessage(){
+        mRecyclerView.setVisibility(View.GONE);
+        errorMessageTextView.setVisibility(View.VISIBLE);
+        mLoadingIndicator.setVisibility(View.GONE);
+
+    }
+    private void showLoadingIndicator(){
+        mRecyclerView.setVisibility(View.GONE);
+        errorMessageTextView.setVisibility(View.GONE);
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+    }
+
     @Override
-    public void onPriceItemClick(int ClickedItemIndex) {
+    public void onMovieItemClick(int ClickedItemIndex) {
+        Context context = MainActivity.this;
+        String message = String.valueOf(ClickedItemIndex);
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show();
 
     }
 
@@ -70,12 +113,15 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int selectedMenuItem = item.getItemId();
-        if (selectedMenuItem == R.id.action_sort) {
-            Context context = MainActivity.this;
-            String message = "sort clicked";
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
-            makeSearchQuery();
+        if (selectedMenuItem == R.id.action_sortMP) {
+            sortPopular=true;
+//            Context context = MainActivity.this;
+//            String message = "sort clicked";
+//            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        }else if (selectedMenuItem == R.id.action_sortTR) {
+            sortPopular = false;
         }
+        makeSearchQuery();
 
         return super.onOptionsItemSelected(item);
     }
@@ -85,7 +131,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            //mLoadingIndicator.setVisibility(View.VISIBLE);
+            showLoadingIndicator();
+//            mRecyclerView.setVisibility(View.GONE);
+//            mLoadingIndicator.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -104,7 +152,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         @Override
         protected void onPostExecute(String s) {
             // parsing the response.
-//            mLoadingIndicator.setVisibility(View.INVISIBLE);
             Log.i("sss", s);
             movieList = new ArrayList<>();
             outputArraysLength = 0;
@@ -162,6 +209,9 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                     }
                 }
                 adapter.setMovieData(movieList);
+//                mRecyclerView.setVisibility(View.VISIBLE);
+//                mLoadingIndicator.setVisibility(View.INVISIBLE);
+                showPosterGrid();
 
             }
         }

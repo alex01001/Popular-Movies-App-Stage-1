@@ -2,12 +2,14 @@ package com.example.android.popularmovie1;
 
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -27,7 +29,7 @@ public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MyViewHolde
 
     public interface MovieItemClickListener {
 
-        void onPriceItemClick(int ClickedItemIndex);
+        void onMovieItemClick(int ClickedItemIndex);
 
     }
 
@@ -49,8 +51,14 @@ public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MyViewHolde
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Movie current = data.get(position);
         URL posterURL = NetworkTools.buildPosterUrl(current);
-        ImageView posterImg;
-        Picasso.with(context).load(posterURL.toString()).into(holder.posterImg);
+        //ImageView posterImg;
+        Picasso.with(context).load(posterURL.toString()).resize(185,277).centerCrop().into(holder.posterImg);
+        ViewGroup.LayoutParams lp;
+        lp = holder.posterImg.getLayoutParams();
+
+        //LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) layout.getLayoutParams();
+        lp.height = 270*Resources.getSystem().getDisplayMetrics().widthPixels/(2*185)-16;
+
         Log.i("sssONbind", posterURL.toString());
        // holder.posterImg.setImageResource(R.drawable.arrow3);
 
@@ -84,7 +92,7 @@ public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MyViewHolde
         @Override
         public void onClick(View view) {
             int clickedPosition = getAdapterPosition();
-            onClickListener.onPriceItemClick(clickedPosition);
+            onClickListener.onMovieItemClick(clickedPosition);
         }
 
 

@@ -6,7 +6,7 @@ public class Constants {
     public static final String API_PARAM = "api_key";
     public static final String POPULAR_MOVIES_URL="popular";
     public static final String TOP_MOVIES_URL="top_rated";
-    public static final String API_KEY="afafe491c66600b8b00df2c987842890";
+    public static final String API_KEY="";
     public static final String IMAGE_URL = "http://image.tmdb.org/t/p/w185" ;
 
 

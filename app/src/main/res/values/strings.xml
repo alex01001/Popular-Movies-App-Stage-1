@@ -1,4 +1,6 @@
 <resources>
-    <string name="app_name">PopularMovie1</string>
-    <string name="sort">Sort</string>
+    <string name="app_name">Movie App v.1</string>
+    <string name="sortMostPopular">Most Popular Movies</string>
+    <string name="sortTopRated">Top Rated Movies</string>
+    <string name="errorMessage">Failed to load. Please, check your Internet connection and try again. </string>
 </resources>

@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.example.android.popularmovie1.MainActivity">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/tv_error_message_diaplay"
+        android:textSize="22sp"
+        android:padding="16dp"
+        android:text = "@string/errorMessage"
+        android:visibility="invisible"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_postersGrid"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
+    <ProgressBar
+        android:id="@+id/pb_loading_indicator"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:layout_width="42dp"
+        android:layout_height="42dp" />
 
 
-</GridLayout>
+
+</LinearLayout>
