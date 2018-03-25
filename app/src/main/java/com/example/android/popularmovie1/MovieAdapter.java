@@ -51,7 +51,6 @@ public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MyViewHolde
         ViewGroup.LayoutParams lp;
         lp = holder.posterImg.getLayoutParams();
         lp.height = 270*Resources.getSystem().getDisplayMetrics().widthPixels/(2*185)-16;
-        Log.i("sssONbind", posterURL.toString());
     }
     public void setMovieData (List<Movie> mData){
         data = mData;

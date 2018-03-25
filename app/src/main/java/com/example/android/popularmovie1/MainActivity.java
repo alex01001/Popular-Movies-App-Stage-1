@@ -66,9 +66,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         if(isOnline()) {
             URL MovieUrl = NetworkTools.buildUrl(sortPopular);
             String searchResults = null;
-            Log.i("sss", MovieUrl.toString());
             new MovieQueryTask().execute(MovieUrl);
-
         }else {
             showErrorMessage();
         }
@@ -138,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            Log.i("sss", "started");
             return searchResults;
         }
 
@@ -149,7 +146,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 return;
             }
             // parsing the response.
-            Log.i("sss", s);
             movieList = new ArrayList<>();
             outputArraysLength = 0;
 
@@ -196,8 +192,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                         movie.setReleaseDate(movieItem.getString("release_date"));
                         movieList.add(movie);
 
-                        Log.d("getPosterPath", movie.getPosterPath());
-                        Log.d("title", movie.getTitle());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
