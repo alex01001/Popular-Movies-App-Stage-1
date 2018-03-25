@@ -25,16 +25,11 @@ public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MyViewHolde
     List<Movie> data = Collections.emptyList();
     private Context context;
 
-
-
     public interface MovieItemClickListener {
-
         void onMovieItemClick(int ClickedItemIndex);
-
     }
 
     public MovieAdapter (Context tContext, MovieItemClickListener listener){
-
         context = tContext;
         inflater = LayoutInflater.from(tContext);
         onClickListener = listener;
@@ -50,43 +45,27 @@ public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MyViewHolde
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Movie current = data.get(position);
-        URL posterURL = NetworkTools.buildPosterUrl(current);
-        //ImageView posterImg;
+        URL posterURL = NetworkTools.buildPosterUrl(current.getPosterPath());
         Picasso.with(context).load(posterURL.toString()).resize(185,277).centerCrop().into(holder.posterImg);
+
         ViewGroup.LayoutParams lp;
         lp = holder.posterImg.getLayoutParams();
-
-        //LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) layout.getLayoutParams();
         lp.height = 270*Resources.getSystem().getDisplayMetrics().widthPixels/(2*185)-16;
-
         Log.i("sssONbind", posterURL.toString());
-       // holder.posterImg.setImageResource(R.drawable.arrow3);
-
-
-//        holder.itemImg.setImageResource(current.img);
-//        holder.itemDate.setText(current.date);
-//        holder.itemPrice.setText(current.price);
-//        holder.itemChange.setText(current.change);
-
     }
     public void setMovieData (List<Movie> mData){
         data = mData;
         notifyDataSetChanged();
-
     }
 
     @Override
     public int getItemCount() {
-
         if(data==null) return 0;
         return data.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder
             implements View.OnClickListener{
-//        private TextView itemDate;
-//        private TextView itemPrice;
-//        private TextView itemChange;
         private ImageView posterImg;
 
         @Override
@@ -99,9 +78,6 @@ public class MovieAdapter extends RecyclerView.Adapter <MovieAdapter.MyViewHolde
         public MyViewHolder(View itemView) {
             super(itemView);
             posterImg = (ImageView) itemView.findViewById(R.id.iv_poster);
-//            itemDate = (TextView) itemView.findViewById(R.id.list_date);
-//            itemPrice = (TextView) itemView.findViewById(R.id.list_price);
-//            itemChange = (TextView) itemView.findViewById(R.id.list_change);
             itemView.setOnClickListener(this);
         }
     }

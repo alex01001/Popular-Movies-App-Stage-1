@@ -11,5 +11,4 @@
         android:orderInCategory="1"
         android:title="@string/sortTopRated"
         app:showAsAction="never"/>
-
 </menu>

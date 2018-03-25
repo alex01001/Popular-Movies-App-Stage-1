@@ -28,15 +28,12 @@ public class NetworkTools {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-
         return url;
     }
-
-    public static URL buildPosterUrl(Movie movie) {
-        //http://image.tmdb.org/t/p/w185//nBNZadXqJSdt05SHLqgT0HuC5Gm.jpg
+// builds full poster URL
+    public static URL buildPosterUrl(String posterPath) {
         Uri builtUri = Uri.parse(Constants.IMAGE_URL).buildUpon()
-                //.appendPath(movie.getPosterPath())
-                .appendEncodedPath(movie.getPosterPath())
+                .appendEncodedPath(posterPath)
                 .build();
 
         URL url = null;
@@ -61,10 +58,8 @@ public class NetworkTools {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         try {
             InputStream in = urlConnection.getInputStream();
-
             Scanner scanner = new Scanner(in);
             scanner.useDelimiter("\\A");
-
             boolean hasInput = scanner.hasNext();
             if (hasInput) {
                 return scanner.next();
@@ -75,8 +70,4 @@ public class NetworkTools {
             urlConnection.disconnect();
         }
     }
-
-
-
-
 }
